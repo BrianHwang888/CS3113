@@ -1,0 +1,20 @@
+﻿  ShaderProgram.cpp
+  Matrix.cpp
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113\project_template\windows\nyucodebase\nyucodebase\matrix.cpp(148): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113\project_template\windows\nyucodebase\nyucodebase\matrix.cpp(149): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113\project_template\windows\nyucodebase\nyucodebase\matrix.cpp(150): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113\project_template\windows\nyucodebase\nyucodebase\matrix.cpp(151): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113\project_template\windows\nyucodebase\nyucodebase\matrix.cpp(165): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113\project_template\windows\nyucodebase\nyucodebase\matrix.cpp(166): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113\project_template\windows\nyucodebase\nyucodebase\matrix.cpp(167): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113\project_template\windows\nyucodebase\nyucodebase\matrix.cpp(168): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113\project_template\windows\nyucodebase\nyucodebase\matrix.cpp(172): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113\project_template\windows\nyucodebase\nyucodebase\matrix.cpp(173): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113\project_template\windows\nyucodebase\nyucodebase\matrix.cpp(174): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113\project_template\windows\nyucodebase\nyucodebase\matrix.cpp(175): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113\project_template\windows\nyucodebase\nyucodebase\matrix.cpp(213): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113\project_template\windows\nyucodebase\nyucodebase\matrix.cpp(214): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  main.cpp
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113\project_template\windows\nyucodebase\nyucodebase\main.cpp(97): warning C4305: 'argument': truncation from 'double' to 'float'
+  Generating Code...
+  NYUCodebase.vcxproj -> C:\Users\potatoe\Documents\School\College\Year 2018\HEOP Spring 2018\Intro_to_Games\CS3113\project_template\Windows\NYUCodebase\Debug\NYUCodebase.exe
