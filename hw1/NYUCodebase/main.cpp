@@ -56,9 +56,9 @@ int main(int argc, char *argv[])
 
 	program_untex.Load(RESOURCE_FOLDER"vertex.glsl", RESOURCE_FOLDER"fragment.glsl");
 	program.Load(RESOURCE_FOLDER"vertex_textured.glsl", RESOURCE_FOLDER"fragment_textured.glsl");
-	
+
 	projection_matrix.SetOrthoProjection(-3.55f, 3.55f, -2.0f, 2.0f, -1.0f, 1.0f);
-	
+
 	glUseProgram(program.programID);
 	glUseProgram(program_untex.programID);
 
@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
 
 		glDisableVertexAttribArray(program_untex.positionAttribute);
 		glDisableVertexAttribArray(program_untex.positionAttribute);
-		
+
 		program.SetModelMatrix(model_matrix2);
 		glBindTexture(GL_TEXTURE_2D, ship);
 		//program.SetColor(1.0, 1.0, 0.0, 1.0);
@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
 		glEnableVertexAttribArray(program.positionAttribute);
 
 		float texCoord2[] = { 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 };
-		glVertexAttribPointer(program.positionAttribute, 2, GL_FLOAT, false, 0, texCoord2);
+		glVertexAttribPointer(program.texCoordAttribute, 2, GL_FLOAT, false, 0, texCoord2);
 		glEnableVertexAttribArray(program.texCoordAttribute);
 
 		glDrawArrays(GL_TRIANGLES, 0, 6);

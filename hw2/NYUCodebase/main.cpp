@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
 	Matrix view_matrix;
 
 	program.Load(RESOURCE_FOLDER"vertex.glsl", RESOURCE_FOLDER"fragment.glsl");
-	projection_matrix.SetOrthoProjection(-3.55f, 3.55f, -2.0f, 2.0f, -1.0f, 1.0f);
+	projection_matrix.SetOrthoProjection(-7.1f, 7.1f, -4.0f, 4.0f, -1.0f, 1.0f);
 
 	glUseProgram(program.programID);
 
@@ -118,17 +118,17 @@ int main(int argc, char *argv[])
 		if (ball.y - ball.height/2 <= bot_wall.y + bot_wall.height/2) {
 			ball.velocity_y *= -1;
 		}
-		if (player_1.x - player_1.width/2 < ball.x + ball.width / 2
-				&& player_1.x + player_1.width / 2 > ball.x - ball.width/2
-				&& player_1.y + player_1.height / 2 > ball.y - ball.height / 2
-				&& player_1.y - player_1.height / 2 < ball.y + ball.height / 2)
+		if (player_1.x - player_1.width/2 <= ball.x + ball.width / 2
+				&& player_1.x + player_1.width / 2 >= ball.x - ball.width/2
+				&& player_1.y + player_1.height / 2 >= ball.y - ball.height / 2
+				&& player_1.y - player_1.height / 2 <= ball.y + ball.height / 2)
 				ball.velocity_x *= -1;
 		
 
-		if (ball.x + ball.width / 2 > player_2.x - player_2.width / 2
-			&& ball.x - ball.width / 2 < player_2.x + player_2.width / 2
-			&& ball.y + ball.height / 2 > player_2.y - player_2.height / 2
-			&& ball.y - ball.height / 2 < player_2.y + player_2.height / 2){
+		if (ball.x + ball.width / 2 >= player_2.x - player_2.width / 2
+			&& ball.x - ball.width / 2 <= player_2.x + player_2.width / 2
+			&& ball.y + ball.height / 2 >= player_2.y - player_2.height / 2
+			&& ball.y - ball.height / 2 <= player_2.y + player_2.height / 2){
 			ball.velocity_x *= -1;
 		}
 		ball.y += sin(angle * 3.1415926 / 180) * elapsed * ball.velocity_y;

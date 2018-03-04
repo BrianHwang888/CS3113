@@ -1,4 +1,6 @@
 ﻿  main.cpp
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113_hw\hw2\nyucodebase\main.cpp(53): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113_hw\hw2\nyucodebase\main.cpp(54): warning C4305: 'argument': truncation from 'double' to 'float'
 c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113_hw\hw2\nyucodebase\main.cpp(134): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
 c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113_hw\hw2\nyucodebase\main.cpp(135): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
   NYUCodebase.vcxproj -> C:\Users\potatoe\Documents\School\College\Year 2018\HEOP Spring 2018\Intro_to_Games\CS3113_Hw\hw2\Debug\NYUCodebase.exe
