@@ -1,5 +1,5 @@
 ﻿  main.cpp
 c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113_hw\hw3\nyucodebase\main.cpp(227): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113_hw\hw3\nyucodebase\main.cpp(404): warning C4018: '<': signed/unsigned mismatch
-c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113_hw\hw3\nyucodebase\main.cpp(432): warning C4018: '<': signed/unsigned mismatch
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113_hw\hw3\nyucodebase\main.cpp(410): warning C4018: '<': signed/unsigned mismatch
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113_hw\hw3\nyucodebase\main.cpp(438): warning C4018: '<': signed/unsigned mismatch
   NYUCodebase.vcxproj -> C:\Users\potatoe\Documents\School\College\Year 2018\HEOP Spring 2018\Intro_to_Games\CS3113_Hw\hw3\Debug\NYUCodebase.exe

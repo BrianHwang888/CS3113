@@ -311,6 +311,12 @@ void update_game(game_state &game, float elapsed) {
 			game.aliens[i].x += game.aliens[i].velocity_x * elapsed;
 			game.aliens[i].y -= game.aliens[i].velocity_y * elapsed;
 		}
+		if (game.player_1.x + 0.5 * game.player_1.aspect / 2 >= game.aliens[i].x - 0.5 * game.aliens[i].aspect * game.aliens[i].size / 2
+			&& game.player_1.x - 0.5 * game.player_1.aspect / 2 <= game.aliens[i].x + 0.5 * game.aliens[i].aspect * game.aliens[i].size / 2
+			&& game.player_1.y + 0.5 * game.player_1.aspect / 2 >= game.aliens[i].y - 0.5 * game.aliens[i].aspect * game.aliens[i].size / 2
+			&& game.player_1.y - 0.5 * game.player_1.aspect / 2 <= game.aliens[i].y + 0.5 * game.aliens[i].aspect * game.aliens[i].size / 2) {
+			done = true;
+		}
 
 	}
 	for (int i = 0; i < MAX_BULLETS; i++) {
