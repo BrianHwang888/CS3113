@@ -20,7 +20,7 @@
 #endif
 
 #define MAX_BULLETS 10
-#define MAX_ALIENS 10
+#define MAX_ALIENS 20
 
 
 class Entity {
@@ -62,7 +62,7 @@ void process_input(float elapsed);
 
 GLuint LoadTexture(const char *filepath);
 void draw_text(ShaderProgram *program, GLuint font_text, std::string, float size, float spacing, float x, float y);
-void update_player(game_state &game, SDL_Event &event, float elapsed);
+//void update_player(game_state &game, SDL_Event &event, float elapsed);
 
 void game_setup(game_state &game);
 void process_game(game_state &game, float elapsed);
@@ -126,7 +126,6 @@ int main(int argc, char *argv[])
 		program.SetProjectionMatrix(projection_matrix);
 		program.SetViewMatrix(view_matrix);
 		render();
-		
 		SDL_GL_SwapWindow(displayWindow);
 	}
 	SDL_Quit();
@@ -284,7 +283,7 @@ void process_game(game_state &game, float elapsed){
 		}
 	}
 }
-void update_player(game_state &game, SDL_Event &event, float elapsed) {
+/*void update_player(game_state &game, SDL_Event &event, float elapsed) {
 	while (SDL_PollEvent(&event))
 	{
 		if (event.type == SDL_QUIT || event.type == SDL_WINDOWEVENT_CLOSE) done = true;
@@ -300,8 +299,9 @@ void update_player(game_state &game, SDL_Event &event, float elapsed) {
 			}
 		}
 	}
-}
+}*/
 void update_game(game_state &game, float elapsed) {
+	
 	for (int i = 0; i < MAX_ALIENS; i++) {
 		if (game.aliens[i].x != 4.0f && game.aliens[i].x != -4.0f) {
 			game.aliens[i].x += game.aliens[i].velocity_x * elapsed;

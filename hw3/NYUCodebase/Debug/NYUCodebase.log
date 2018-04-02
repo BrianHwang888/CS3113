@@ -1,5 +1,22 @@
-﻿  main.cpp
-c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113_hw\hw3\nyucodebase\main.cpp(227): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+﻿  ShaderProgram.cpp
+  Matrix.cpp
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113_hw\hw3\nyucodebase\matrix.cpp(148): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113_hw\hw3\nyucodebase\matrix.cpp(149): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113_hw\hw3\nyucodebase\matrix.cpp(150): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113_hw\hw3\nyucodebase\matrix.cpp(151): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113_hw\hw3\nyucodebase\matrix.cpp(165): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113_hw\hw3\nyucodebase\matrix.cpp(166): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113_hw\hw3\nyucodebase\matrix.cpp(167): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113_hw\hw3\nyucodebase\matrix.cpp(168): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113_hw\hw3\nyucodebase\matrix.cpp(172): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113_hw\hw3\nyucodebase\matrix.cpp(173): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113_hw\hw3\nyucodebase\matrix.cpp(174): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113_hw\hw3\nyucodebase\matrix.cpp(175): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113_hw\hw3\nyucodebase\matrix.cpp(213): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113_hw\hw3\nyucodebase\matrix.cpp(214): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  main.cpp
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113_hw\hw3\nyucodebase\main.cpp(226): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113_hw\hw3\nyucodebase\main.cpp(410): warning C4018: '<': signed/unsigned mismatch
 c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113_hw\hw3\nyucodebase\main.cpp(438): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
   NYUCodebase.vcxproj -> C:\Users\potatoe\Documents\School\College\Year 2018\HEOP Spring 2018\Intro_to_Games\CS3113_Hw\hw3\Debug\NYUCodebase.exe
