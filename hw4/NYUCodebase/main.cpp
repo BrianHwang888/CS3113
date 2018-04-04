@@ -78,7 +78,6 @@ public:
 	bool collidedLeft;
 	bool collidedRight;
 
-	void set_sprite(sheetsprite &sheet, GLuint text, float u_pos, float v_pos, float wid, float hei, float siz);
 };
 class game_state {
 public:
@@ -97,7 +96,7 @@ GLuint LoadTexture(const char *filepath);
 void PlaceEntity(game_state &game, string type, float x, float y);
 void render_game(game_state &game);
 
-float gravity = 0.025f;
+float gravity = -1.0f;
 bool done = false;
 
 SDL_Window* displayWindow;
@@ -143,7 +142,7 @@ int main(int argc, char *argv[])
 		float ticks = (float)SDL_GetTicks() / 1000.0f;
 		float elapsed = ticks - lastframeticks;
 		lastframeticks = ticks;
-		elapsed += accumulator;
+		/*elapsed += accumulator;
 		if (elapsed < FIXED_TIMESTEP) {
 			accumulator = elapsed;
 			continue;
@@ -153,12 +152,18 @@ int main(int argc, char *argv[])
 			update(FIXED_TIMESTEP);
 			elapsed -= FIXED_TIMESTEP;
 		}
-		accumulator = elapsed;
+		accumulator = elapsed;*/
+		process_input(elapsed);
+		update(elapsed);
 		render();
 		SDL_GL_SwapWindow(displayWindow);
 	}
 	SDL_Quit();
 	return 0;
+}
+
+float lerp(float v0, float v1, float t) {
+	return (1.0 - t) * v0 + t * v1;
 }
 
 void worldToTileCoordinates(float worldX, float worldY, int *gridX, int *gridY) {
@@ -174,13 +179,12 @@ void PlaceEntity(game_state &game, string type, float x, float y) {
 		u = (float)(80 % SPRITE_COUNT_X) / SPRITE_COUNT_X;
 		v = 80.0f / SPRITE_COUNT_X / SPRITE_COUNT_Y;
 		game.set_entity(game.player_1, sheetsprite(tileText, u, v, 1.0f / (float)SPRITE_COUNT_X, 1.0f / (float)SPRITE_COUNT_Y, TILE_SIZE, 80), x, y, 0, false, type);
-		game.player_1.velocity.y = 2.0f;
 	}
 	if (type == "Key") {
 		u = (float)(86 % SPRITE_COUNT_X) / SPRITE_COUNT_X;
 		v = 86.0f / SPRITE_COUNT_X / SPRITE_COUNT_Y;
 
-		game.set_entity(game.key, sheetsprite(tileText, u, v, 1.0f / (float)SPRITE_COUNT_X, 1.0f / (float)SPRITE_COUNT_Y, TILE_SIZE, 86), 28.0f, y, 0, true, type);
+		game.set_entity(game.key, sheetsprite(tileText, u, v, 1.0f / (float)SPRITE_COUNT_X, 1.0f / (float)SPRITE_COUNT_Y, TILE_SIZE, 86), x, y, 0, true, type);
 	}
 	if (type == "dirt") {
 		u = (float)(1 % SPRITE_COUNT_X) / SPRITE_COUNT_X;
@@ -207,6 +211,9 @@ void game_state::set_entity(Entity &entity, sheetsprite &sprite, float x_pos, fl
 	entity.sprite = sprite;
 	set_position(entity.position, x_pos, y_pos, z_pos);
 	entity.isStatic = stat;
+	entity.velocity.x = 0;
+	entity.velocity.y = 0;
+	entity.velocity.z = 0;
 	if (type == "Player")
 		entity.entityType = ENTITY_PLAYER;
 	if (type == "Key")
@@ -273,8 +280,8 @@ Vector3::Vector3() {
 
 Entity::Entity() {
 	position = Vector3(0.0f, 0.0f, 0.0f);
-	size = Vector3(0.0f, 0.0f, 0.0f);
-	velocity = Vector3(5.0f, 0.0f, 0.0f);
+	size = Vector3(TILE_SIZE, TILE_SIZE, 0.0f);
+	velocity = Vector3(0.0f, 0.0f, 0.0f);
 	acceleration = Vector3(0.0f, 0.0f, 0.0f);
 	isStatic = false;
 }
@@ -282,38 +289,56 @@ Entity::Entity(sheetsprite entity, float x_pos, float y_pos, float z_pos, bool s
 	sprite = entity;
 	position = Vector3(x_pos, y_pos, z_pos);
 	size = Vector3(TILE_SIZE, TILE_SIZE, 0.0f);
-	velocity = Vector3(1.0, 0.0, 0.0f);
+	velocity = Vector3(0.0f, 0.0f, 0.0f);
 	acceleration = Vector3(0.0f, 0.0f, 0.0f);
 	isStatic = stat;
 }
-void Entity::set_sprite(sheetsprite &sheet, GLuint text, float u_pos, float v_pos, float wid, float hei, float siz) {
-	sheet.height = hei;
-	sheet.width = wid;
-	sheet.textureID = text;
-	sheet.u = u_pos;
-	sheet.v = v_pos;
-	sheet.size = siz;
 
-}
 void Entity::update(float elapsed) {
 	float penetration;
 	int e1x, e1y, e2x, e2y;
 	if (!isStatic) {
-		velocity.y -= gravity * elapsed;
-		position.y -= velocity.y * elapsed;
+		if (collideswith(game.key) && entityType == ENTITY_PLAYER)
+			done = true;
+		worldToTileCoordinates(position.x, position.y, &e1x, &e1y);
+		//velocity.y = lerp(velocity.y, gravity, elapsed * -0.03f);
+		velocity.x = lerp(velocity.x, 0.0f, elapsed * 1.0f);
+		
+		velocity.y += gravity * elapsed;
+		velocity.x += acceleration.x * elapsed;
+
+		position.x += velocity.x * elapsed;
+		position.y += velocity.y * elapsed;
 		for (int i = 0; i < 26; i++) {
-			collidedBot = false;
-			collidedTop = false;
-			collidedLeft = false;
-			collidedRight = false;
+			worldToTileCoordinates(game.tile[i].position.x, game.tile[i].position.y, &e2x, &e2y);
 			if (collideswith(game.tile[i])) {
-				if (collidedBot) {
-					worldToTileCoordinates(position.x, position.y, &e1x, &e1y);
-					worldToTileCoordinates(game.tile[i].position.x, game.tile[i].position.y, &e2x, &e2y);
-					//penetration = fabs(-TILE_SIZE * e2y - (e1y - TILE_SIZE / 2));
-					penetration = fabs(e2y - game.tile[i].size.y /2 - e1y - size.y / 2);
-					position.y += penetration;
+				collidedBot = false;
+				collidedTop = false;
+				collidedLeft = false;
+				collidedRight = false;
+				if (velocity.y < 0){ //(collidedBot && position.y - size.y / 2 <= game.tile[i].position.y + game.tile[i].size.y / 2) {
+					penetration = fabs((position.y - size.y / 2) - (game.tile[i].position.y + game.tile[i].size.y / 2));
+					position.y += penetration + 0.0001f;
 					velocity.y = 0;
+					collidedBot = true;
+				}
+				if (velocity.y > 0) {//(collidedTop && position.y + size.y / 2 >= game.tile[i].position.y - game.tile[i].size.y / 2) {
+					penetration = fabs((position.y + size.y / 2) - (game.tile[i].position.y - game.tile[i].size.y / 2));
+					position.y += penetration + 0.0001f;
+					velocity.y = 0;
+					collidedTop = true;
+				}
+				if (velocity.x > 0 && e1y == e2y){//(collidedRight && position.x + size.x / 2 >= game.tile[i].position.x - game.tile[i].size.x / 2) {
+					penetration = fabs((position.x - size.x / 2) - (game.tile[i].position.x + game.tile[i].size.x / 2));
+					position.x += penetration + 0.0001f;
+					velocity.x = 0;
+					collidedRight = true;
+				}
+				if (velocity.x < 0 && e1y == e2y){//(collidedLeft && position.x - size.x / 2 <= game.tile[i].position.x + game.tile[i].size.x / 2) {
+					penetration = fabs((position.x + size.x / 2) - (game.tile[i].position.x - game.tile[i].size.x / 2));
+					position.x += penetration + 0.0001f;
+					velocity.x = 0;
+					collidedLeft = true;
 				}
 			}
 		}
@@ -328,17 +353,27 @@ bool Entity::collideswith(const Entity &entity) {
 	int e1x, e1y, e2x, e2y;
 	worldToTileCoordinates(position.x, position.y, &e1x, &e1y);
 	worldToTileCoordinates(entity.position.x, entity.position.y, &e2x, &e2y);
-	if (e1y + size.y / 2 >= e2y - entity.size.y / 2)
-		collidedTop = true;
-	if (e1y - size.y / 2 <= e2y + entity.size.y / 2)
+	collidedBot = false;
+	collidedTop = false;
+	collidedLeft = false;
+	collidedRight = false;
+	/*if (position.y + size.y / 2 >= fabs((-TILE_SIZE * e2y) - TILE_SIZE))
 		collidedBot = true;
-	if (e1x + size.x / 2 >= e2x - entity.size.x / 2)
+	if (e1y - si / 2 <= fabs(-TILE_SIZE * e2y))
+		collidedTop = true;
+	if (e1x + TILE_SIZE / 2 >= e2x * TILE_SIZE)
 		collidedRight = true;
-	if (e1x - size.x / 2 <= e2x + entity.size.x / 2)
+	if (e1x - TILE_SIZE / 2 <= (e2x * TILE_SIZE) + TILE_SIZE)
+		collidedLeft = true;*/
+	//if (e1x == e2x && e1y == e2y) {
+	if (position.y + size.y / 2 >= entity.position.y - entity.size.y / 2) 
+		collidedTop = true;
+	if (position.y - size.y / 2 <= entity.position.y + entity.size.y / 2)
+		collidedBot = true;
+	if (position.x + size.x / 2 >= entity.position.x - entity.size.x / 2) 
+		collidedRight = true;
+	if (position.x - size.x / 2 <= entity.position.x + entity.size.x / 2) 
 		collidedLeft = true;
-	/*else
-		return false;
-	return true;*/
 	return collidedTop && collidedBot && collidedRight && collidedLeft;
 }
 GLuint LoadTexture(const char *filepath) {
@@ -407,7 +442,7 @@ void renderlevel() {
 void render_game(game_state &game) {
 	game.player_1.render();
 	game.key.render();
-	for (int i = 0; i < 26; i++) {
+	for (int i = 0; i < 24; i++) {
 		game.tile[i].render();
 	}
 }
@@ -420,7 +455,7 @@ void render() {
 
 void update(float elapsed) {
 	view_matrix.Identity();
-	view_matrix.Scale(0.05f, 0.05f, 0);
+	view_matrix.Scale(0.25f, 0.25f, 0);
 	view_matrix.Translate(-1 * game.player_1.position.x, -1 * game.player_1.position.y, -1 * game.player_1.position.z);
 	
 	program.SetViewMatrix(view_matrix);
@@ -435,14 +470,16 @@ void process_input(float elapsed) {
 		if (event.type == SDL_QUIT || event.type == SDL_WINDOWEVENT_CLOSE) done = true;
 		else if (event.type == SDL_KEYDOWN) {
 			if (event.key.keysym.scancode == SDL_SCANCODE_RIGHT){ //&& game.player_1.collidedRight) {
-				game.player_1.position.x += game.player_1.velocity.x * elapsed;
+				game.player_1.velocity.x = 5.0f;
+				//game.player_1.position.x += game.player_1.velocity.x * elapsed;
 			}
 			else if (event.key.keysym.scancode == SDL_SCANCODE_LEFT){// && game.player_1.collidedLeft) {
-				game.player_1.position.x -= game.player_1.velocity.x * elapsed;
+				game.player_1.velocity.x = -5.0f;
+				//game.player_1.position.x += game.player_1.velocity.x * elapsed;
 			}
 			else if (event.key.keysym.scancode == SDL_SCANCODE_SPACE){// && game.player_1.collidedBot) {
 				game.player_1.velocity.y = 2.0f;
-				game.player_1.position.y += game.player_1.velocity.y * elapsed;
+				//game.player_1.position.y += game.player_1.velocity.y * elapsed;
 			}
 			else if (event.key.keysym.scancode == SDL_SCANCODE_Q) {
 				done = true;
