@@ -21,7 +21,7 @@ using namespace std;
 #define RESOURCE_FOLDER "NYUCodebase.app/Contents/Resources/"
 #endif
 
-#define TILE_SIZE 0.1f
+#define TILE_SIZE 2.0f
 #define	LEVEL_HEIGHT 32
 #define LEVEL_WIDTH 128
 #define SPRITE_COUNT_X 16
@@ -42,7 +42,7 @@ public:
 class sheetsprite {
 public:
 	sheetsprite();
-	sheetsprite(unsigned int textureID, float u, float v, float width, float height, float size);
+	sheetsprite(unsigned int textureID, float u, float v, float width, float height, float size, int index);
 	
 	void Draw(float x, float y, float z);
 
@@ -52,6 +52,7 @@ public:
 	float width;
 	float height;
 	GLuint textureID;
+	int index;
 };
 class Entity {
 public:
@@ -83,7 +84,7 @@ class game_state {
 public:
 	Entity player_1;
 	Entity key;
-	Entity tile[26];
+	Entity tile[24];
 
 	void set_entity(Entity &entity, sheetsprite &sprite, float x_pos, float y_pos, float z_pos, bool static, string type);
 };
@@ -169,33 +170,30 @@ void PlaceEntity(game_state &game, string type, float x, float y) {
 	static int index = 0;
 	float u; 
 	float v;
-
 	if (type == "Player") {
 		u = (float)(80 % SPRITE_COUNT_X) / SPRITE_COUNT_X;
 		v = 80.0f / SPRITE_COUNT_X / SPRITE_COUNT_Y;
-		game.set_entity(game.player_1, sheetsprite(tileText, u, v, 1.0f / (float)SPRITE_COUNT_X, 1.0f / (float)SPRITE_COUNT_Y, TILE_SIZE), x, y, 0, false, type);
-		game.player_1.set_sprite(game.player_1.sprite, tileText, u, v, 1.0f / (float)SPRITE_COUNT_X, 1.0f / (float)SPRITE_COUNT_Y, TILE_SIZE);
-		
+		game.set_entity(game.player_1, sheetsprite(tileText, u, v, 1.0f / (float)SPRITE_COUNT_X, 1.0f / (float)SPRITE_COUNT_Y, TILE_SIZE, 80), x, y, 0, false, type);
+		game.player_1.velocity.y = 2.0f;
 	}
 	if (type == "Key") {
 		u = (float)(86 % SPRITE_COUNT_X) / SPRITE_COUNT_X;
 		v = 86.0f / SPRITE_COUNT_X / SPRITE_COUNT_Y;
 
-		game.set_entity(game.key, sheetsprite(tileText, u, v, 1.0f / (float)SPRITE_COUNT_X, 1.0f / (float)SPRITE_COUNT_Y, TILE_SIZE), 28.0f, y, 0, true, type);
-		game.player_1.set_sprite(game.key.sprite, tileText, u, v, 1.0f / (float)SPRITE_COUNT_X, 1.0f / (float)SPRITE_COUNT_Y, TILE_SIZE);
+		game.set_entity(game.key, sheetsprite(tileText, u, v, 1.0f / (float)SPRITE_COUNT_X, 1.0f / (float)SPRITE_COUNT_Y, TILE_SIZE, 86), 28.0f, y, 0, true, type);
 	}
 	if (type == "dirt") {
 		u = (float)(1 % SPRITE_COUNT_X) / SPRITE_COUNT_X;
 		v = 1.0f / SPRITE_COUNT_X / SPRITE_COUNT_Y;
 
-		game.tile[index] = Entity(sheetsprite(tileText, u, v, 1.0f / (float)SPRITE_COUNT_X, 1.0f / (float)SPRITE_COUNT_Y, TILE_SIZE), x, y, 0, true);
+		game.tile[index] = Entity(sheetsprite(tileText, u, v, 1.0f / (float)SPRITE_COUNT_X, 1.0f / (float)SPRITE_COUNT_Y, TILE_SIZE, 1), x, y, 0, true);
 		index++;
 	}
 	if (type == "dirt_2") {
 		u = (float)(18 % SPRITE_COUNT_X) / SPRITE_COUNT_X;
 		v = 18.0f / SPRITE_COUNT_X / SPRITE_COUNT_Y;
 
-		game.tile[index] = Entity(sheetsprite(tileText, u, v, 1.0f / (float)SPRITE_COUNT_X, 1.0f / (float)SPRITE_COUNT_Y, TILE_SIZE), x, y, 0, true);
+		game.tile[index] = Entity(sheetsprite(tileText, u, v, 1.0f / (float)SPRITE_COUNT_X, 1.0f / (float)SPRITE_COUNT_Y, TILE_SIZE, 18), x, y, 0, true);
 		index++;
 	}
 	
@@ -218,12 +216,9 @@ void game_state::set_entity(Entity &entity, sheetsprite &sprite, float x_pos, fl
 void sheetsprite::Draw(float x, float y, float z) {
 	glBindTexture(GL_TEXTURE_2D, tileText);
 	float aspect = width / height;
-	float vertices[] = { -0.5f * aspect * size, -0.5f * aspect * size,
-		0.5f * aspect * size,-0.5f * aspect * size,
-		0.5f * aspect * size, 0.5f * aspect * size,
-		0.5f * aspect * size, 0.5f * aspect * size,
-		-0.5f * aspect * size, 0.5f * aspect * size,
-		-0.5f * aspect * size, -0.5f * aspect * size };
+	float vertices[] = {
+		-0.5f, -0.5f, 0.5f, -0.5f, 0.5f, 0.5f, 0.5f, 0.5f, -0.5f, 0.5f, -0.5f, -0.5f
+		};
 	GLfloat texCoord[] = {
 		u, v + height,
 		u + width, v + height,
@@ -235,6 +230,7 @@ void sheetsprite::Draw(float x, float y, float z) {
 	};
 	model_matrix.Identity();
 	model_matrix.Translate(x, y, z);
+	model_matrix.Scale(TILE_SIZE, TILE_SIZE, 1.0f);
 	program.SetModelMatrix(model_matrix);
 	glVertexAttribPointer(program.positionAttribute, 2, GL_FLOAT, false, 0, vertices);
 	glEnableVertexAttribArray(program.positionAttribute);
@@ -255,13 +251,14 @@ sheetsprite::sheetsprite() {
 	width = 1.0f / 16.0f;
 	height = 1.0f / 8.0f;
 }
-sheetsprite::sheetsprite(unsigned int textID, float u_cor, float v_cor, float wid, float hei, float siz) {
+sheetsprite::sheetsprite(unsigned int textID, float u_cor, float v_cor, float wid, float hei, float siz, int i) {
 	size = siz;
 	textureID = textID;
 	u = u_cor;
 	v = v_cor;
 	width = wid;
 	height = hei;
+	index = i;
 }
 Vector3::Vector3(float x_val, float y_val, float z_val) {
 	x = x_val;
@@ -277,15 +274,15 @@ Vector3::Vector3() {
 Entity::Entity() {
 	position = Vector3(0.0f, 0.0f, 0.0f);
 	size = Vector3(0.0f, 0.0f, 0.0f);
-	velocity = Vector3(2.0f, 0.0f, 0.0f);
+	velocity = Vector3(5.0f, 0.0f, 0.0f);
 	acceleration = Vector3(0.0f, 0.0f, 0.0f);
 	isStatic = false;
 }
 Entity::Entity(sheetsprite entity, float x_pos, float y_pos, float z_pos, bool stat) {
 	sprite = entity;
 	position = Vector3(x_pos, y_pos, z_pos);
-	size = Vector3(16.0, 16.0, 0.0f);
-	velocity = Vector3(1.0, 1.0, 0.0f);
+	size = Vector3(TILE_SIZE, TILE_SIZE, 0.0f);
+	velocity = Vector3(1.0, 0.0, 0.0f);
 	acceleration = Vector3(0.0f, 0.0f, 0.0f);
 	isStatic = stat;
 }
@@ -299,23 +296,26 @@ void Entity::set_sprite(sheetsprite &sheet, GLuint text, float u_pos, float v_po
 
 }
 void Entity::update(float elapsed) {
+	float penetration;
+	int e1x, e1y, e2x, e2y;
 	if (!isStatic) {
-		/*if (collideswith(game.key))
-			done = true;*/
-		if (!collidedBot) {
-			velocity.y -= gravity * elapsed;
-			position.y += velocity.y * elapsed;
-			for (int i = 0; i < 26; i++)
-				collideswith(game.tile[i]);
-		}
-		if (collidedBot)
-			velocity.y = 0;
-		if (collidedLeft) {
-			//collision
-		}
-		if (!collidedRight) {
-			for (int i = 0; i < 26; i++)
-				collideswith(game.tile[i]);
+		velocity.y -= gravity * elapsed;
+		position.y -= velocity.y * elapsed;
+		for (int i = 0; i < 26; i++) {
+			collidedBot = false;
+			collidedTop = false;
+			collidedLeft = false;
+			collidedRight = false;
+			if (collideswith(game.tile[i])) {
+				if (collidedBot) {
+					worldToTileCoordinates(position.x, position.y, &e1x, &e1y);
+					worldToTileCoordinates(game.tile[i].position.x, game.tile[i].position.y, &e2x, &e2y);
+					//penetration = fabs(-TILE_SIZE * e2y - (e1y - TILE_SIZE / 2));
+					penetration = fabs(e2y - game.tile[i].size.y /2 - e1y - size.y / 2);
+					position.y += penetration;
+					velocity.y = 0;
+				}
+			}
 		}
 	}
 }
@@ -325,15 +325,21 @@ void Entity::render() {
 	
 }
 bool Entity::collideswith(const Entity &entity) {
-	if (position.x + size.x / 2 >= entity.position.x - entity.size.x / 2)
-		collidedRight = true;
-	if (position.x - size.x / 2 <= entity.position.x + entity.size.x / 2)
-		collidedLeft = true;
-	if (position.y + size.y / 2 >= entity.position.y - entity.size.y / 2)
+	int e1x, e1y, e2x, e2y;
+	worldToTileCoordinates(position.x, position.y, &e1x, &e1y);
+	worldToTileCoordinates(entity.position.x, entity.position.y, &e2x, &e2y);
+	if (e1y + size.y / 2 >= e2y - entity.size.y / 2)
 		collidedTop = true;
-	if (position.y - size.y / 2 <= entity.position.y + entity.size.y / 2)
+	if (e1y - size.y / 2 <= e2y + entity.size.y / 2)
 		collidedBot = true;
-	return collidedBot && collidedLeft && collidedRight && collidedTop;
+	if (e1x + size.x / 2 >= e2x - entity.size.x / 2)
+		collidedRight = true;
+	if (e1x - size.x / 2 <= e2x + entity.size.x / 2)
+		collidedLeft = true;
+	/*else
+		return false;
+	return true;*/
+	return collidedTop && collidedBot && collidedRight && collidedLeft;
 }
 GLuint LoadTexture(const char *filepath) {
 	int w, h, comp;
@@ -390,6 +396,7 @@ void renderlevel() {
 	glEnableVertexAttribArray(program.texCoordAttribute);
 
 	model_matrix.Identity();
+	//model_matrix.Scale(0.5f, 0.5f, 1.0f);
 	program.SetModelMatrix(model_matrix);
 	glBindTexture(GL_TEXTURE_2D, tileText);
 	glDrawArrays(GL_TRIANGLES, 0, 6 * LEVEL_HEIGHT * LEVEL_WIDTH);
@@ -413,13 +420,12 @@ void render() {
 
 void update(float elapsed) {
 	view_matrix.Identity();
+	view_matrix.Scale(0.05f, 0.05f, 0);
 	view_matrix.Translate(-1 * game.player_1.position.x, -1 * game.player_1.position.y, -1 * game.player_1.position.z);
-	program.SetViewMatrix(view_matrix);
-	game.player_1.collidedBot = false;
-	game.player_1.collidedTop = false;
-	game.player_1.collidedLeft = false;
-	game.player_1.collidedRight = false;
 	
+	program.SetViewMatrix(view_matrix);
+
+	game.player_1.collideswith(game.key);
 	game.player_1.update(elapsed);
 }
 void process_input(float elapsed) {
@@ -434,7 +440,8 @@ void process_input(float elapsed) {
 			else if (event.key.keysym.scancode == SDL_SCANCODE_LEFT){// && game.player_1.collidedLeft) {
 				game.player_1.position.x -= game.player_1.velocity.x * elapsed;
 			}
-			else if (event.key.keysym.scancode == SDL_SCANCODE_SPACE && !game.player_1.collidedTop) {
+			else if (event.key.keysym.scancode == SDL_SCANCODE_SPACE){// && game.player_1.collidedBot) {
+				game.player_1.velocity.y = 2.0f;
 				game.player_1.position.y += game.player_1.velocity.y * elapsed;
 			}
 			else if (event.key.keysym.scancode == SDL_SCANCODE_Q) {

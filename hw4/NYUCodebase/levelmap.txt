@@ -55,47 +55,52 @@ location=56,17,1,1
 [Platform]
 # ground
 type=dirt
-location=35,19,1,1
+location=35,18,1,1
 
 [Platform]
 # ground
 type=dirt
-location=36,19,1,1
+location=36,18,1,1
 
 [Platform]
 # ground
 type=dirt
-location=37,19,1,1
+location=37,18,1,1
 
 [Platform]
 # ground
 type=dirt
-location=38,19,1,1
+location=38,18,1,1
 
 [Platform]
 # ground
 type=dirt
-location=39,19,1,1
+location=39,18,1,1
 
 [Platform]
 # ground
 type=dirt
-location=40,19,1,1
+location=40,18,1,1
 
 [Platform]
 # ground
 type=dirt
-location=42,19,1,1
+location=42,18,1,1
 
 [Platform]
 # ground
 type=dirt
-location=41,19,1,1
+location=41,18,1,1
 
 [Platform]
 # ground
 type=dirt
-location=43,19,1,1
+location=43,18,1,1
+
+[Platform]
+# ground
+type=dirt
+location=44,18,1,1
 
 [Platform]
 # ground
@@ -105,27 +110,17 @@ location=44,19,1,1
 [Platform]
 # ground
 type=dirt
-location=44,20,1,1
+location=45,19,1,1
 
 [Platform]
 # ground
 type=dirt
-location=45,20,1,1
+location=46,19,1,1
 
 [Platform]
 # ground
 type=dirt
-location=46,20,1,1
-
-[Platform]
-# ground
-type=dirt
-location=47,20,1,1
-
-[Platform]
-# ground
-type=dirt
-location=48,20,1,1
+location=47,19,1,1
 
 [Platform]
 # ground
@@ -135,42 +130,47 @@ location=48,19,1,1
 [Platform]
 # ground
 type=dirt
-location=49,19,1,1
+location=48,18,1,1
 
 [Platform]
 # ground
 type=dirt
-location=50,19,1,1
+location=49,18,1,1
 
 [Platform]
 # ground
 type=dirt
-location=52,19,1,1
+location=50,18,1,1
 
 [Platform]
 # ground
 type=dirt
-location=51,19,1,1
+location=52,18,1,1
 
 [Platform]
 # ground
 type=dirt
-location=53,19,1,1
+location=51,18,1,1
 
 [Platform]
 # ground
 type=dirt
-location=54,19,1,1
+location=53,18,1,1
 
 [Platform]
 # ground
 type=dirt
-location=55,19,1,1
+location=54,18,1,1
+
+[Platform]
+# ground
+type=dirt
+location=55,18,1,1
 
 [Platform]
 # ground
 type=dirt_2
-location=56,19,1,1
+location=56,18,1,1
 
 [Object Layer 2]
 # Player_1
