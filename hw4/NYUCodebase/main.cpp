@@ -299,7 +299,7 @@ void Entity::update(float elapsed) {
 		if (collideswith(game.key) && entityType == ENTITY_PLAYER)
 			done = true;
 		worldToTileCoordinates(position.x, position.y, &e1x, &e1y);
-		//velocity.y = lerp(velocity.y, gravity, elapsed * -0.03f);
+		velocity.y = lerp(velocity.y, gravity, elapsed * -0.03f);
 		velocity.x = lerp(velocity.x, 0.0f, elapsed * 1.0f);
 		
 		velocity.y += gravity * elapsed;
@@ -314,25 +314,25 @@ void Entity::update(float elapsed) {
 				collidedTop = false;
 				collidedLeft = false;
 				collidedRight = false;
-				if (velocity.y < 0 && e1x == e2x) { //(collidedBot && position.y - size.y / 2 <= game.tile[i].position.y + game.tile[i].size.y / 2) {
+				if (velocity.y < 0 && e1x == e2x) {
 					penetration = fabs((position.y - size.y / 2) - (game.tile[i].position.y + game.tile[i].size.y / 2));
 					position.y += penetration + 0.0001f;
 					velocity.y = 0;
 					collidedBot = true;
 				}
-				if (velocity.y > 0 && e1x == e2x) {//(collidedTop && position.y + size.y / 2 >= game.tile[i].position.y - game.tile[i].size.y / 2) {
+				if (velocity.y > 0 && e1x == e2x) {
 					penetration = fabs((position.y + size.y / 2) - (game.tile[i].position.y - game.tile[i].size.y / 2));
 					position.y += penetration + 0.0001f;
 					velocity.y = 0;
 					collidedTop = true;
 				}
-				if (velocity.x > 0 && e1y == e2y){//(collidedRight && position.x + size.x / 2 >= game.tile[i].position.x - game.tile[i].size.x / 2) {
+				if (velocity.x > 0 && e1y == e2y) {
 					penetration = fabs((position.x + size.x / 2) - (game.tile[i].position.x - game.tile[i].size.x / 2));
 					position.x -= penetration + 0.0001f;
 					velocity.x = 0;
 					collidedRight = true;
 				}
-				if (velocity.x < 0 && e1y == e2y){//(collidedLeft && position.x - size.x / 2 <= game.tile[i].position.x + game.tile[i].size.x / 2) {
+				if (velocity.x < 0 && e1y == e2y) {
 					penetration = fabs((position.x - size.x / 2) - (game.tile[i].position.x + game.tile[i].size.x / 2));
 					position.x += penetration + 0.0001f;
 					velocity.x = 0;
