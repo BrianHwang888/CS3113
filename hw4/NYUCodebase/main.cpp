@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
 		float ticks = (float)SDL_GetTicks() / 1000.0f;
 		float elapsed = ticks - lastframeticks;
 		lastframeticks = ticks;
-		/*elapsed += accumulator;
+		elapsed += accumulator;
 		if (elapsed < FIXED_TIMESTEP) {
 			accumulator = elapsed;
 			continue;
@@ -152,9 +152,7 @@ int main(int argc, char *argv[])
 			update(FIXED_TIMESTEP);
 			elapsed -= FIXED_TIMESTEP;
 		}
-		accumulator = elapsed;*/
-		process_input(elapsed);
-		update(elapsed);
+		accumulator = elapsed;
 		render();
 		SDL_GL_SwapWindow(displayWindow);
 	}
@@ -310,32 +308,32 @@ void Entity::update(float elapsed) {
 		position.x += velocity.x * elapsed;
 		position.y += velocity.y * elapsed;
 		for (int i = 0; i < 26; i++) {
-			worldToTileCoordinates(game.tile[i].position.x, game.tile[i].position.y, &e2x, &e2y);
 			if (collideswith(game.tile[i])) {
+				worldToTileCoordinates(game.tile[i].position.x, game.tile[i].position.y, &e2x, &e2y);
 				collidedBot = false;
 				collidedTop = false;
 				collidedLeft = false;
 				collidedRight = false;
-				if (velocity.y < 0){ //(collidedBot && position.y - size.y / 2 <= game.tile[i].position.y + game.tile[i].size.y / 2) {
+				if (velocity.y < 0 && e1x == e2x) { //(collidedBot && position.y - size.y / 2 <= game.tile[i].position.y + game.tile[i].size.y / 2) {
 					penetration = fabs((position.y - size.y / 2) - (game.tile[i].position.y + game.tile[i].size.y / 2));
 					position.y += penetration + 0.0001f;
 					velocity.y = 0;
 					collidedBot = true;
 				}
-				if (velocity.y > 0) {//(collidedTop && position.y + size.y / 2 >= game.tile[i].position.y - game.tile[i].size.y / 2) {
+				if (velocity.y > 0 && e1x == e2x) {//(collidedTop && position.y + size.y / 2 >= game.tile[i].position.y - game.tile[i].size.y / 2) {
 					penetration = fabs((position.y + size.y / 2) - (game.tile[i].position.y - game.tile[i].size.y / 2));
 					position.y += penetration + 0.0001f;
 					velocity.y = 0;
 					collidedTop = true;
 				}
 				if (velocity.x > 0 && e1y == e2y){//(collidedRight && position.x + size.x / 2 >= game.tile[i].position.x - game.tile[i].size.x / 2) {
-					penetration = fabs((position.x - size.x / 2) - (game.tile[i].position.x + game.tile[i].size.x / 2));
-					position.x += penetration + 0.0001f;
+					penetration = fabs((position.x + size.x / 2) - (game.tile[i].position.x - game.tile[i].size.x / 2));
+					position.x -= penetration + 0.0001f;
 					velocity.x = 0;
 					collidedRight = true;
 				}
 				if (velocity.x < 0 && e1y == e2y){//(collidedLeft && position.x - size.x / 2 <= game.tile[i].position.x + game.tile[i].size.x / 2) {
-					penetration = fabs((position.x + size.x / 2) - (game.tile[i].position.x - game.tile[i].size.x / 2));
+					penetration = fabs((position.x - size.x / 2) - (game.tile[i].position.x + game.tile[i].size.x / 2));
 					position.x += penetration + 0.0001f;
 					velocity.x = 0;
 					collidedLeft = true;
@@ -350,32 +348,14 @@ void Entity::render() {
 	
 }
 bool Entity::collideswith(const Entity &entity) {
-	int e1x, e1y, e2x, e2y;
-	worldToTileCoordinates(position.x, position.y, &e1x, &e1y);
-	worldToTileCoordinates(entity.position.x, entity.position.y, &e2x, &e2y);
-	collidedBot = false;
-	collidedTop = false;
-	collidedLeft = false;
-	collidedRight = false;
-	/*if (position.y + size.y / 2 >= fabs((-TILE_SIZE * e2y) - TILE_SIZE))
-		collidedBot = true;
-	if (e1y - si / 2 <= fabs(-TILE_SIZE * e2y))
-		collidedTop = true;
-	if (e1x + TILE_SIZE / 2 >= e2x * TILE_SIZE)
-		collidedRight = true;
-	if (e1x - TILE_SIZE / 2 <= (e2x * TILE_SIZE) + TILE_SIZE)
-		collidedLeft = true;*/
-	//if (e1x == e2x && e1y == e2y) {
-	if (position.y + size.y / 2 >= entity.position.y - entity.size.y / 2) 
-		collidedTop = true;
-	if (position.y - size.y / 2 <= entity.position.y + entity.size.y / 2)
-		collidedBot = true;
-	if (position.x + size.x / 2 >= entity.position.x - entity.size.x / 2) 
-		collidedRight = true;
-	if (position.x - size.x / 2 <= entity.position.x + entity.size.x / 2) 
-		collidedLeft = true;
-	return collidedTop && collidedBot && collidedRight && collidedLeft;
-}
+	if (position.y + size.y / 2 >= entity.position.y - entity.size.y / 2
+		&& position.y - size.y / 2 <= entity.position.y + entity.size.y / 2
+		&& position.x + size.x / 2 >= entity.position.x - entity.size.x / 2
+		&& position.x - size.x / 2 <= entity.position.x + entity.size.x / 2)
+		return true;
+	else
+		return false;
+}	
 GLuint LoadTexture(const char *filepath) {
 	int w, h, comp;
 	unsigned char* image = stbi_load(filepath, &w, &h, &comp, STBI_rgb_alpha);
@@ -438,7 +418,6 @@ void renderlevel() {
 	glDisableVertexAttribArray(program.positionAttribute);
 	glDisableVertexAttribArray(program.texCoordAttribute);
 }
-
 void render_game(game_state &game) {
 	game.player_1.render();
 	game.key.render();
@@ -446,7 +425,6 @@ void render_game(game_state &game) {
 		game.tile[i].render();
 	}
 }
-
 void render() {
 	glClear(GL_COLOR_BUFFER_BIT);
 	renderlevel();
@@ -469,17 +447,15 @@ void process_input(float elapsed) {
 	{
 		if (event.type == SDL_QUIT || event.type == SDL_WINDOWEVENT_CLOSE) done = true;
 		else if (event.type == SDL_KEYDOWN) {
-			if (event.key.keysym.scancode == SDL_SCANCODE_RIGHT){ //&& game.player_1.collidedRight) {
+			if (event.key.keysym.scancode == SDL_SCANCODE_RIGHT){
 				game.player_1.velocity.x = 5.0f;
-				//game.player_1.position.x += game.player_1.velocity.x * elapsed;
 			}
-			else if (event.key.keysym.scancode == SDL_SCANCODE_LEFT){// && game.player_1.collidedLeft) {
+			else if (event.key.keysym.scancode == SDL_SCANCODE_LEFT){
 				game.player_1.velocity.x = -5.0f;
-				//game.player_1.position.x += game.player_1.velocity.x * elapsed;
 			}
-			else if (event.key.keysym.scancode == SDL_SCANCODE_SPACE){// && game.player_1.collidedBot) {
+			else if (event.key.keysym.scancode == SDL_SCANCODE_SPACE && game.player_1.collidedBot) {
 				game.player_1.velocity.y = 2.0f;
-				//game.player_1.position.y += game.player_1.velocity.y * elapsed;
+				game.player_1.collidedBot = false;
 			}
 			else if (event.key.keysym.scancode == SDL_SCANCODE_Q) {
 				done = true;
