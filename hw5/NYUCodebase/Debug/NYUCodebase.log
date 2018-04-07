@@ -1,0 +1,5 @@
+﻿  main.cpp
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113_hw\hw5\nyucodebase\main.cpp(176): warning C4018: '<': signed/unsigned mismatch
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113_hw\hw5\nyucodebase\main.cpp(181): warning C4018: '<': signed/unsigned mismatch
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113_hw\hw5\nyucodebase\main.cpp(199): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  NYUCodebase.vcxproj -> C:\Users\potatoe\Documents\School\College\Year 2018\HEOP Spring 2018\Intro_to_Games\CS3113_Hw\hw5\Debug\NYUCodebase.exe
