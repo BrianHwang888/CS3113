@@ -1,0 +1,4 @@
+﻿  main.cpp
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113_hw\hw6\nyucodebase\main.cpp(144): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\users\potatoe\documents\school\college\year 2018\heop spring 2018\intro_to_games\cs3113_hw\hw6\nyucodebase\main.cpp(145): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+  NYUCodebase.vcxproj -> C:\Users\potatoe\Documents\School\College\Year 2018\HEOP Spring 2018\Intro_to_Games\CS3113_Hw\hw6\Debug\NYUCodebase.exe
