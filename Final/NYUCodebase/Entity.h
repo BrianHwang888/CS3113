@@ -78,7 +78,7 @@ public:
 
 	bool collidedTop, collidedBot, collidedLeft, collidedRight;
 
-	bool e_front, e_behind, e_top, e_bot;
+	bool e_right, e_left;
 };
 class enemy : public Entity {
 public:

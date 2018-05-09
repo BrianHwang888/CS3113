@@ -164,7 +164,7 @@ void player::update(game_state &level, float elapsed) {
 		done = true;
 	for (int i = 0; i < level.Enemy.size(); i++) {
 		if (collideswith(level.Enemy[i])) {
-			if (kill_mode && ( e_behind && level.Enemy[i].e_behind || e_front && level.Enemy[i].e_front)) {
+			if (kill_mode){// && ( e_left && level.Enemy[i].e_left || e_right && level.Enemy[i].e_right)) {
 				Mix_PlayChannel(-1, e_death, 0);
 				level.Enemy[i].position.x = -50.0f;
 				level.Enemy[i].position.y = -50.0f;
@@ -196,25 +196,25 @@ void player::update(game_state &level, float elapsed) {
 	if (!kill_mode) {
 		if (acceleration.x < 0 && sprite.invertx != -1){
 			sprite.invertx = -1;
-			e_front = false;
-			e_behind = true;
+			e_right = false;
+			e_left = true;
 			}
 		if (acceleration.x > 0) {
 			sprite.invertx = 1;
-			e_front = true;
-			e_behind = false;
+			e_right = true;
+			e_left = false;
 		}
 	}
 	if (kill_mode) {
 		if (acceleration.x < 0 && anger.invertx != -1) {
 			anger.invertx = -1;
-			e_behind = true;
-			e_front = false;
+			e_left = true;
+			e_right = false;
 		}
 		if (acceleration.x > 0) {
 			anger.invertx = 1;
-			e_front = true;
-			e_behind = false;
+			e_right = true;
+			e_left = false;
 		}
 	}
 	position.y += velocity.y * elapsed;
@@ -288,7 +288,7 @@ void enemy::render() {
 void enemy::update(game_state &level, float elapsed) {
 	const float runanimation[] = { 64.0f, 65.0f, 66.0f, 67.0f, 68.0f, 69.0f, 70.0f, 71.0f };
 	static float animationElapsed = 0.0f;
-	float framesPerSecond = 10.0f;
+	float framesPerSecond = 1.0f;
 	const int numFrames = 8;
 	static int index = 0;
 
@@ -330,8 +330,8 @@ void enemy::update(game_state &level, float elapsed) {
 				sprite.invertx *= -1;
 				head.invertx *= -1;
 				torso.invertx *= -1;
-				e_front = false;
-				e_behind = true;
+				e_right = false;
+				e_left = true;
 			}
 			if (velocity.x < 0 && e2y >= e1y && e1x >= e2x) {
 				penetration = fabs((TILE_SIZE * e2x + TILE_SIZE / 2) - (position.x - size.x / 2));
@@ -340,8 +340,8 @@ void enemy::update(game_state &level, float elapsed) {
 				sprite.invertx *= -1;
 				head.invertx *= -1;
 				torso.invertx *= -1;
-				e_front = true;
-				e_behind = false;
+				e_right = true;
+				e_left = false;
 			}
 		}
 	}
@@ -362,7 +362,7 @@ void red_enemy::update(game_state &level, float elapsed) {\
 	if (!isStatic) {
 		const float runanimation[] = { 64.0f, 65.0f, 66.0f, 67.0f, 68.0f, 69.0f, 70.0f, 71.0f };
 		static float animationElapsed = 0.0f;
-		float framesPerSecond = 10.0f;
+		float framesPerSecond = 2.0f;
 		const int numFrames = 8;
 		static int index = 0;
 
@@ -399,21 +399,30 @@ void red_enemy::update(game_state &level, float elapsed) {\
 			}
 		}
 
-		if (!spots && fabs(position.x - level.player_1.position.x) < 20.0f && fabs(position.y - level.player_1.position.y) < 3.0f) {
+		if (!spots && fabs(position.x - level.player_1.position.x) < 20.0f && fabs(position.y - level.player_1.position.y) < 2.0f) {
 			spots = true;
 			Mix_PlayChannel(-1, spotted, 0);
 
 			velocity.x = 10.0f;
-			if (e_front && position.x - level.player_1.position.x < 0.0f) {
+			if (e_right && (position.x - level.player_1.position.x > 0.0f)) {
+				if(velocity.x > 0.0f)
+					velocity.x *= -1;
 				sprite.invertx *= -1;
 				head.invertx *= -1;
 				torso.invertx *= -1;
+				e_right = false;
+				e_left = true;
 			}
-			else if (e_behind && position.x - level.player_1.position.x > 0.0f) {
-				velocity.x *= -1;
+			else if (e_left && (position.x - level.player_1.position.x < 0.0f)) {
 				sprite.invertx *= -1;
 				head.invertx *= -1;
 				torso.invertx *= -1;
+				e_left = false;
+				e_right = true;
+			}
+			else if (e_left) {
+				velocity.x *= -1;
+
 			}
 
 		}
@@ -428,13 +437,13 @@ void red_enemy::update(game_state &level, float elapsed) {\
 			sprite.invertx *= -1;
 			head.invertx *= -1;
 			torso.invertx *= -1;
-			if (e_front) {
-				e_front = false;
-				e_behind = true;
+			if (e_right) {
+				e_right = false;
+				e_left = true;
 			}
-			else if (e_behind) {
-				e_behind = false;
-				e_front = true;
+			else if (e_left) {
+				e_left = false;
+				e_right = true;
 			}
 		}
 
@@ -451,8 +460,8 @@ void red_enemy::update(game_state &level, float elapsed) {\
 					head.invertx *= -1;
 					torso.invertx *= -1;
 					
-					e_front = true;
-					e_behind = false;
+					e_right = true;
+					e_left = false;
 				}
 				if (velocity.x < 0 && e2y >= e1y && e1x >= e2x) {
 					collidedLeft = true;
@@ -464,8 +473,8 @@ void red_enemy::update(game_state &level, float elapsed) {\
 					head.invertx *= -1;
 					torso.invertx *= -1;
 					
-					e_front = false;
-					e_behind = true;
+					e_right = false;
+					e_left = true;
 				}
 			}
 		}

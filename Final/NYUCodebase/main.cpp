@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
 	key_get = Mix_LoadWAV("key_get.wav");
 	rage_sound = Mix_LoadWAV("rage.wav");
 
-	//Mix_VolumeChunk(spotted, 10);
+	Mix_VolumeChunk(spotted, 15);
 	int enemy_index = 0, red_index = 0;
 	read_map(level_1.map, level_1.tiles);
 	for (int i = 0; i < level_1.map.entities.size(); i++) {
@@ -133,19 +133,7 @@ int main(int argc, char *argv[])
 		float ticks = (float)SDL_GetTicks() / 1000.0f;
 		float elapsed = ticks - lastframeticks;
 		lastframeticks = ticks;
-		/*elapsed += accumulator;
-		if (elapsed < FIXED_TIMESTEP) {
-			accumulator = elapsed;
-			continue;
-		}
-		while (elapsed >= FIXED_TIMESTEP) {
-			process_input(FIXED_TIMESTEP);
-			update(FIXED_TIMESTEP);
-			render();
-			elapsed -= FIXED_TIMESTEP;
-
-		}
-		accumulator = elapsed;*/
+		
 		process_input(elapsed);
 		update(elapsed);
 		render();
@@ -225,7 +213,8 @@ void PlaceEntity(game_state &game, string type, float x, float y, int &enemy_ind
 		v = (float)(((int)83) / SPRITE_COUNT_X) / (float)SPRITE_COUNT_Y;
 		game.red_Enemy[red_index].head = sheetsprite(tileText, u, v, 1.0f / (float)SPRITE_COUNT_X, 1.0f / (float)SPRITE_COUNT_Y, TILE_SIZE);
 		game.red_Enemy[red_index].velocity.x = 2.0f;
-		game.red_Enemy[red_index].e_front = true;
+		game.red_Enemy[red_index].e_right = true;
+		game.red_Enemy[red_index].e_left = false;
 		red_index++;
 	}
 	if (type == "Key_1") {
@@ -260,6 +249,8 @@ void PlaceEntity(game_state &game, string type, float x, float y, int &enemy_ind
 		v = (float)(((int)82) / SPRITE_COUNT_X) / (float)SPRITE_COUNT_Y;
 		game.Enemy[enemy_index].head = sheetsprite(tileText, u, v, 1.0f / (float)SPRITE_COUNT_X, 1.0f / (float)SPRITE_COUNT_Y, TILE_SIZE);
 		game.Enemy[enemy_index].velocity.x = 2.0f;
+		game.Enemy[enemy_index].e_right = true;
+		game.Enemy[enemy_index].e_left = false;
 		enemy_index++;
 	}
 }
@@ -460,13 +451,13 @@ void process_mainmenu() {
 }
 void render_mainmenu() {
 	GLuint text = LoadTexture(RESOURCE_FOLDER"pixel_font.png");
-	draw_text(&program, text, "Brown Thingy", 0.5f, 0.0f, -3.05f, 3.0f);
+	draw_text(&program, text, "Brown Thingy's Adventure", 0.5f, 0.0f, -5.0f, 3.0f);
 	draw_text(&program, text, "Press P to play", 0.25f, 0.0f, -2.0f, 2.0f);
 	draw_text(&program, text, "Press Q to quit", 0.25f, 0.0f, -2.0f, 1.0f);
 	draw_text(&program, text, "Left arrow to move left", 0.25f, 0.0f, -1.5f, 0.5f);
 	draw_text(&program, text, "Right arrow to move right", 0.25f, 0.0f, -1.5f, 0.0f);
 	draw_text(&program, text, "Space to jump", 0.25f, 0.0f, -1.5f, -1.0f);
-	draw_text(&program, text, "Press z for kill_mode", 0.25f, 0.0f, -1.5f, -2.0f);
+	draw_text(&program, text, "Press z for a mean look", 0.25f, 0.0f, -1.5f, -2.0f);
 }
 
 void process_gameover() {
